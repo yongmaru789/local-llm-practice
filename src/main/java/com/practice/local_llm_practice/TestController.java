@@ -1,6 +1,7 @@
 package com.practice.local_llm_practice;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -13,8 +14,7 @@ public class TestController {
     }
 
     @GetMapping("/test/ollama")
-    public String testOllama() {
-        return ollamaService.chat("안녕");
+    public String testOllama(@RequestParam String message) {
+        return ollamaService.chat(message);
     }
-
 }
