@@ -1,5 +1,6 @@
 package com.practice.local_llm_practice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -13,6 +14,7 @@ public class OllamaService {
 
     private final WebClient webClient;
     private final String styleChangeSystemPrompt;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public OllamaService(WebClient.Builder webClientBuilder) throws IOException {
         this.webClient = webClientBuilder.baseUrl("http://localhost:11434").build();
@@ -36,7 +38,7 @@ public class OllamaService {
         return callOllama(request);
     }
 
-    public String extractBackgroundColor(String userMessage) {
+    public StyleChangeResult extractBackgroundColor(String userMessage) throws IOException {
         OllamaChatRequest request = new OllamaChatRequest(
                 "qwen3.5:2b",
                 List.of(
@@ -48,7 +50,23 @@ public class OllamaService {
                 "30m"
         );
 
-        return callOllama(request);
+        String rawContent = callOllama(request);
+        String cleaned = stripCodeFence(rawContent);
+        StyleChangeResult result = objectMapper.readValue(cleaned, StyleChangeResult.class);
+
+        return normalize(result);
+    }
+
+    private String stripCodeFence(String text) {
+        return text.replace("```json", "").replace("```", "").trim();
+    }
+
+    private StyleChangeResult normalize(StyleChangeResult result) {
+        String color = result.backgroundColor();
+        if (!color.startsWith("#")) {
+            color = "#" + color;
+        }
+        return new StyleChangeResult(color);
     }
 
     private String callOllama(OllamaChatRequest request) {
