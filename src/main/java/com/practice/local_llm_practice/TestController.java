@@ -17,4 +17,9 @@ public class TestController {
     public String testOllama(@RequestParam String message) {
         return ollamaService.chat(message);
     }
+
+    @GetMapping("/test/style-change")
+    public String testStyleChange(@RequestParam String message) {
+        return ollamaService.extractBackgroundColor(message);
+    }
 }
