@@ -1,4 +1,4 @@
-package com.practice.local_llm_practice;
+package com.practice.local_llm_practice.job;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,5 +1,6 @@
-package com.practice.local_llm_practice;
+package com.practice.local_llm_practice.job;
 
+import com.practice.local_llm_practice.ollama.OllamaService;
 import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.practice.local_llm_practice;
+package com.practice.local_llm_practice.ollama;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.practice.local_llm_practice;
+package com.practice.local_llm_practice.ollama;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
