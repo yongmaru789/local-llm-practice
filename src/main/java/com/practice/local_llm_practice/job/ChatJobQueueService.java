@@ -43,6 +43,7 @@ public class ChatJobQueueService {
         while (true) {
             try {
                 ChatJob job = queue.take();
+                job.markStarted();
                 String result = ollamaService.chat(job.getMessage());
                 job.complete(result);
             } catch (InterruptedException e) {
