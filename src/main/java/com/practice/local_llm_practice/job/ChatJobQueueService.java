@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChatJobQueueService {
 
+    private static final int WORKER_COUNT = 1;
+
     private final BlockingQueue<ChatJob> queue = new LinkedBlockingQueue<>();
     private final Map<String, ChatJob> jobs = new ConcurrentHashMap<>();
     private final OllamaService ollamaService;
@@ -21,10 +23,12 @@ public class ChatJobQueueService {
     }
 
     @PostConstruct
-    public void startWorker() {
-        Thread worker = new Thread(this::processQueue);
-        worker.setDaemon(true);
-        worker.start();
+    public void startWorkers() {
+        for (int i = 0; i < WORKER_COUNT; i++) {
+            Thread worker = new Thread(this::processQueue);
+            worker.setDaemon(true);
+            worker.start();
+        }
     }
 
     public String submit(String message) {
