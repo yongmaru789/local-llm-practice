@@ -1,5 +1,7 @@
 package com.practice.local_llm_practice.job;
 
+import com.practice.local_llm_practice.moderation.ProfanityDetectedException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +17,13 @@ public class ChatJobController {
     }
 
     @GetMapping("/test/chat-job")
-    public String submitJob(@RequestParam String message) {
-        return chatJobQueueService.submit(message);
+    public ResponseEntity<String> submitJob(@RequestParam String message) {
+        try {
+            String id = chatJobQueueService.submit(message);
+            return ResponseEntity.ok(id);
+        } catch (ProfanityDetectedException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/test/chat-job/{id}")

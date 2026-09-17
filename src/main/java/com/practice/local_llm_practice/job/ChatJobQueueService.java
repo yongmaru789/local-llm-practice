@@ -1,5 +1,7 @@
 package com.practice.local_llm_practice.job;
 
+import com.practice.local_llm_practice.moderation.ProfanityDetectedException;
+import com.practice.local_llm_practice.moderation.ProfanityFilterService;
 import com.practice.local_llm_practice.ollama.OllamaService;
 import jakarta.annotation.PostConstruct;
 import java.util.Map;
@@ -17,9 +19,11 @@ public class ChatJobQueueService {
     private final BlockingQueue<ChatJob> queue = new LinkedBlockingQueue<>();
     private final Map<String, ChatJob> jobs = new ConcurrentHashMap<>();
     private final OllamaService ollamaService;
+    private final ProfanityFilterService profanityFilterService;
 
-    public ChatJobQueueService(OllamaService ollamaService) {
+    public ChatJobQueueService(OllamaService ollamaService, ProfanityFilterService profanityFilterService) {
         this.ollamaService = ollamaService;
+        this.profanityFilterService = profanityFilterService;
     }
 
     @PostConstruct
@@ -32,6 +36,10 @@ public class ChatJobQueueService {
     }
 
     public String submit(String message) {
+        if (profanityFilterService.containsProfanity(message)) {
+            throw new ProfanityDetectedException("금칙어가 포함된 메시지입니다.");
+        }
+
         String id = UUID.randomUUID().toString();
         ChatJob job = new ChatJob(id, message);
         jobs.put(id, job);
