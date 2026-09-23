@@ -23,4 +23,9 @@ public class TestController {
     public StyleChangeResult testStyleChange(@RequestParam String message) throws IOException {
         return ollamaService.extractBackgroundColor(message);
     }
+
+    @GetMapping("/test/template")
+    public String testTemplateGeneration(@RequestParam String request) {
+        return ollamaService.generateTemplate(request);
+    }
 }

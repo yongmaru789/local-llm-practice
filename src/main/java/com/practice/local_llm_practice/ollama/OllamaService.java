@@ -14,11 +14,13 @@ public class OllamaService {
 
     private final WebClient webClient;
     private final String styleChangeSystemPrompt;
+    private final String templateGenerationSystemPrompt;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public OllamaService(WebClient.Builder webClientBuilder) throws IOException {
         this.webClient = webClientBuilder.baseUrl("http://localhost:11434").build();
         this.styleChangeSystemPrompt = loadPrompt("prompts/style-change-prompt.txt");
+        this.templateGenerationSystemPrompt = loadPrompt("prompts/template-generation-prompt.txt");
     }
 
     private String loadPrompt(String path) throws IOException {
@@ -57,8 +59,24 @@ public class OllamaService {
         return normalize(result);
     }
 
+    public String generateTemplate(String adminRequest) {
+        OllamaChatRequest request = new OllamaChatRequest(
+                "qwen3.5:2b",
+                List.of(
+                        new OllamaMessage("system", templateGenerationSystemPrompt),
+                        new OllamaMessage("user", adminRequest)
+                ),
+                false,
+                false,
+                "30m"
+        );
+
+        String rawContent = callOllama(request);
+        return stripCodeFence(rawContent);
+    }
+
     private String stripCodeFence(String text) {
-        return text.replace("```json", "").replace("```", "").trim();
+        return text.replace("```html", "").replace("```json", "").replace("```", "").trim();
     }
 
     private StyleChangeResult normalize(StyleChangeResult result) {
