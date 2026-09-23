@@ -16,14 +16,11 @@ public class TemplateHtmlValidator {
     private static Safelist buildSafelist() {
         Safelist safelist = Safelist.none();
 
-        String[] allowedTags = {"div", "h1", "h2", "h3", "p", "span", "img"};
+        String[] allowedTags = {"div", "h1", "h2", "h3", "p", "span"};
         for (String tag : allowedTags) {
             safelist.addTags(tag);
             safelist.addAttributes(tag, "style", "class", "data-slot");
         }
-
-        safelist.addAttributes("img", "src", "alt", "width", "height");
-        safelist.addProtocols("img", "src", "http", "https");
 
         return safelist;
     }
