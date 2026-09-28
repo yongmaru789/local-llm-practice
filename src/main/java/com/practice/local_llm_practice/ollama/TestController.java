@@ -1,6 +1,5 @@
 package com.practice.local_llm_practice.ollama;
 
-import java.io.IOException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,15 +16,5 @@ public class TestController {
     @GetMapping("/test/ollama")
     public String testOllama(@RequestParam String message) {
         return ollamaService.chat(message);
-    }
-
-    @GetMapping("/test/style-change")
-    public StyleChangeResult testStyleChange(@RequestParam String message) throws IOException {
-        return ollamaService.extractBackgroundColor(message);
-    }
-
-    @GetMapping("/test/template")
-    public String testTemplateGeneration(@RequestParam String request) {
-        return ollamaService.generateTemplate(request);
     }
 }
