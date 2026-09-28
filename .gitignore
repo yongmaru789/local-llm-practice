@@ -36,3 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 *.log
+*_result.json
+limit_test.txt
+raw_generation.html
