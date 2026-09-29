@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class TemplateGenerationController {
 
     private final TemplateGenerationPipeline templateGenerationPipeline;
-    private final TemplateGenerationClient templateGenerationClient;
+    private final TemplateLlmClient templateLlmClient;
 
     public TemplateGenerationController(
             TemplateGenerationPipeline templateGenerationPipeline,
-            TemplateGenerationClient templateGenerationClient
+            TemplateLlmClient templateLlmClient
     ) {
         this.templateGenerationPipeline = templateGenerationPipeline;
-        this.templateGenerationClient = templateGenerationClient;
+        this.templateLlmClient = templateLlmClient;
     }
 
     @GetMapping("/test/template-generate")
@@ -25,6 +25,6 @@ public class TemplateGenerationController {
 
     @GetMapping("/test/template-raw")
     public String testRawGenerate(@RequestParam String request) {
-        return templateGenerationClient.generate(request);
+        return templateLlmClient.generate(request);
     }
 }

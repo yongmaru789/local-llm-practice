@@ -7,25 +7,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class TemplateGenerationPipeline {
 
-    private final TemplateGenerationClient templateGenerationClient;
+    private final TemplateLlmClient templateLlmClient;
     private final TemplateHtmlValidator templateHtmlValidator;
     private final TemplateSlotValidator templateSlotValidator;
     private final TemplateColorValidator templateColorValidator;
 
     public TemplateGenerationPipeline(
-            TemplateGenerationClient templateGenerationClient,
+            TemplateLlmClient templateLlmClient,
             TemplateHtmlValidator templateHtmlValidator,
             TemplateSlotValidator templateSlotValidator,
             TemplateColorValidator templateColorValidator
     ) {
-        this.templateGenerationClient = templateGenerationClient;
+        this.templateLlmClient = templateLlmClient;
         this.templateHtmlValidator = templateHtmlValidator;
         this.templateSlotValidator = templateSlotValidator;
         this.templateColorValidator = templateColorValidator;
     }
 
     public TemplateGenerationResult generate(String adminRequest) {
-        String rawHtml = templateGenerationClient.generate(adminRequest);
+        String rawHtml = templateLlmClient.generate(adminRequest);
         String cleanHtml = templateHtmlValidator.sanitize(rawHtml);
 
         List<String> errors = new ArrayList<>();
